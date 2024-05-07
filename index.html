@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranong Leaflet</title>
+
+<!-- link css leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<!-- link Java Script leaflet -->
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
+<!-- STYLE -->
+    <style>
+    body{
+        padding: 0;
+        margin: 0;
+    }
+
+    html,
+    body,
+    #map{
+        height: 100%;
+        width: 100%;
+    }
+    </style>
+</head>
+
+
+<body>
+    <!-- แบ่งส่วนหน้าจอ -->
+    <div id="map" style="width : 100% ; height : 100%"> </div>
+
+    <!-- ส่วนของJavascript พิมพ์ให้อยู่ในScript -->
+    <!-- 1.เรียกbasemap // 2.layer data // 3.interaction tool,element -->
+    <!-- L.map สร้างแผนที่ // setView() กำหนดพิกัด ซูม // L.tileLayer เรียกbasemap -->
+
+
+    <script>
+
+    //set view map
+    var map = L.map('map').setView([9.921110 , 98.6314653],12);
+
+
+    // import basemap
+    var TopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+	maxZoom: 17,
+	attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">TopoMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    }).addTo(map);
+
+    //import basemap
+    var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+    }).addTo(map);
+
+    // // import basemap
+    // var stadia = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
+	// minZoom: 0,
+	// maxZoom: 20,
+	// attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	// ext: 'png'
+    // }).addTo(map);
+
+    // import basemap
+    var OSM = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+	maxZoom: 18,
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // รวมกลุ่มเลเยอร์basemap
+    var baselayers = {
+        "TopoMap" : TopoMap,
+        "esri" : esri,
+        "OSM" : OSM,
+    }
+
+    // Add Layer
+    L.control.layers(baselayers).addTo(map);
+
+
+    // การเพิ่มข้อมูลลงในแผนที่ โดยแสดงข้อมูลสถานที่ท่องเที่ยวหลายจุด
+    var place = [
+        ["<b>สุสานเจ้าเมืองระนอง</b><br>เป็นสุสานที่เป็นศิลปะแบบจีนเป็นที่ฝังศพของเจ้าเมืองระนองนาม พระยาดำรงสุจริตมหิศร (คอซู้เจียง) มีตุ๊กตารูปปั้นสัตว์และขุนนางที่นำมาจากประเทศจีน", 9.9840840, 98.6274819],
+        ["<b>ภูเขาหญ้า</b><br>ภูเขาที่เต็มไปด้วยหญ้าต่างสีต่างวันเวลาและเนินเขางดงาม ในช่วงฤดูแล้งภูเขาหญ้าจะแปรเปลี่ยนเป็นสีเหลือง เมื่อเข้าสู่ฤดูฝนจะเปลี่ยนเป็นสีเขียว", 9.8658624, 98.6211207],
+        ["<b>น้ำตกหงาว</b><br>เป็นน้ำตกที่สูงที่สุดในจังหวัดระนอง น้ำจะไหลเยอะสุดช่วงฤดูฝน", 9.8563309, 98.6276904],
+        ["<b>บ่อน้ำร้อนพรรั้ง</b><br>อยู่ในเขตอุทยานแห่งชาติน้ำตกหงาว น้ำร้อนใสสะอาดไม่มีกลิ่นกำมะถัน", 9.8945783 , 98.6413738],
+        ["<b>บ่อน้ำร้อนรักษะวาริน</b><br>เป็นบ่อน้ำร้อนที่เกิดขึ้นเองตามธรรมชาติ อยู่ติดกับลำธารหาดส้มแป้นที่ไหลผ่านกลางหุบเขาทางตะวันออกของตัวเมืองระนอง", 9.9586981 , 98.6496788],
+        ["<b>อุทยานหมู่เกาะระนอง</b><br>อุทยานเป็นที่ตั้งของชายฝั่งทะเลซึ่งเป็นส่วนหนึ่งของเขตสงวนชีวมลฑลโลกแห่งที่ 4 ของประเทศไทย", 9.8748195, 98.5871277],
+        ["<b>พระราชวังรัตนรังสรรค์</b><br>พระราชวังที่ทำด้วยไม้สักและไม้ตะเคียนทอง เป็นสถาปัตยกรรมแบบ Europe cabanas สร้างขึ้นเนื่องด้วยรัชกาลที่ 5 ได้เสด็จประพาสหัวเมืองปักษ์ใต้ฝ่ายตะวันตกเป็นครั้งแรก",9.9653902 , 98.6366328],
+        ["<b>ระนองแคนยอน</b><br>หุบเหมืองเก่าบนเนินเขา เป็นแอ่งน้ำใส สะท้อนสีเขียวของต้นไม้และเงาผาหินที่อยู่รอบบึง", 9.9348016 , 98.6853621],
+        ["<b>อ่างเก็บน้ำหาดส้มแป้น</b><br>ตั้งอยู่ในที่สูงโอบล้อมด้วยหุบเขาเขียวขจีรอบด้าน และมีบรรยากาศที่เงียบสงบ", 9.9460314 , 98.7007498],
+        ["<b>ประภาคารระนอง</b><br>เป็นประภาคารที่มีความสูงมากที่สุดในประเทศ และยังเป็นท่าเรือของกรมศุลกากรเชื่อมต่อเส้นทางสำหรับนักท่องเที่ยวที่ต้องการไปสัมผัสความงดงามของทะเลเมียนมา ที่เกาะสอง",9.9830909 , 98.5977009]
+    ];
+
+
+    var greenIcon = L.icon({
+    iconUrl: 'https://purepng.com/public/uploads/medium/purepng.com-big-buildingbuildinghousefactoryresidencedwelling-houseconstructionarcitecture-17015284831265mnzz.png',
+    shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+
+    iconSize:     [50, 60], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+   
+
+    for (var i = 0; i < place.length; i++) {
+        marker = new L.marker([place[i][1], place[i][2]], {icon: greenIcon})
+            .bindPopup(place[i][0])
+            .addTo(map);
+    }
+
+
+
+     //Description,Legend
+    var legend = L.control({position: "bottomleft"});
+    legend.onAdd = function(map) {
+        var div = L.DomUtil.create("div","legend");
+        div.innerHTML = 
+            '<p><b>คำอธิบายสัญลักษณ์</b></p>'+
+            '<img src= "https://purepng.com/public/uploads/medium/purepng.com-big-buildingbuildinghousefactoryresidencedwelling-houseconstructionarcitecture-17015284831265mnzz.png" width = 6%>'+
+            'สถานที่ท่องเที่ยวในจังหวัดระนอง'+
+            '<hr>Create by Sunattha Lalaeng<br>'+
+            'ID: 64103010020<br>';
+        return div;
+    };
+    legend.addTo(map);
+
+
+    </script>
+
+
+</body>
+</html>
